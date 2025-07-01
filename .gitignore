@@ -4,3 +4,6 @@
 .Ruserdata
 
 *.Rproj
+.DS_Store
+
+./Tutorials/Tutorial\ LEA\ 3/genotypes*
