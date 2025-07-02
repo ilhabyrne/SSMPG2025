@@ -179,7 +179,7 @@ abline(h = -log10(0.1/ncol(Y)), col = "orange")
 # the most interesting targets
 candidates <- which(qv_lfmm2$significant)
 
-# Circles: Candidate loci at FDR level = 30%
+# Circles: Candidate loci at FDR level = 20%
 points(candidates, -log10(pv_lfmm2)[candidates], cex = .9, col = "brown")
 ```
 
@@ -247,7 +247,7 @@ The relative fitness (loss) after the environmental change can then be compared 
 ## load log of relative fitness
 log_relative_fitness <- read.table("fitness_variation.txt", header = FALSE)[,1]
 
-# plot the relative fitness vs squared root of the genetic offset 
+# plot the negative log relative fitness vs  genetic offset 
 plot(g_offset$offset, - log_relative_fitness , 
      ylab ="Relative fitness (log)",  
      xlab ="Genetic offset", cex = .6, col = "blue")

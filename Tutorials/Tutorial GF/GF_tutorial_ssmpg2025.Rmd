@@ -1,7 +1,7 @@
 ---
-title: "GF tutorial - SSMPG2022"
-author: "Olivier Francois and Clement Gain"
-date: "13/09/2022"
+title: "GF tutorial - SSMPG2025"
+author: "Clément Gain and Olivier Francois"
+date: "Updated July 2025"
 output:
   prettydoc::html_pretty:
     self_contained: true
@@ -17,99 +17,120 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Gradient forests (GF)  is based on the random forests (RF) algorithm. The starting point to compute genetic offset with GF is to model the allelic composition of a population using non-linear functions of environmental gradients. Genetic offsets can then be estimated by computing the difference in composition between two environments. When there are several environmental variables, the genetic offset is obtained by computing the Euclidean distance between the composition vector for the future and for the current environmental variables.
+Gradient Forest (GF) is one of the most frequently used methods for computing genetic offset statistics (Fitzpatrick and Keller, 2015). GF is based on the Random Forest (RF) algorithm. To estimate genetic offset with GF, the first step is to model the allelic composition of populations as a non-linear function of environmental gradients. Genetic offset is then quantified by computing the difference in predicted genetic composition between two environments. When multiple environmental variables are involved, the genetic offset is calculated as the Euclidean distance between the predicted composition vectors under current and future environmental conditions.
 
 ```{r}
 # To install GF, remove the comment character in the next command line 
 # install.packages("gradientForest", repos="http://R-Forge.R-project.org")
-# To install LEA, remove the comment character in the next command line 
-# devtools::install_github("bcm-uga/LEA")
-# We use LEA in order to have access to the example dataset
 library(gradientForest)
+
+# We use LEA in order to have access to the example dataset
 library(LEA)
 ```
 
-This tutorial uses a simulated data set. A brief analysis of population structure and a GEA analysis using four environmental variables can be found in the LEA_tutorial_ssmpg22 file. It is highly recommended to first read the LEA tutorial in order to better understand the data.
 
-## Short presentation of the data
 
-The data set contains a genotypic matrix stored in an lfmm format with 200 diploid individuals (rows) genotyped at 510 SNPs (columns), a matrix with 4 correlated environmental variables (env) measured for each individual.  The data were simulated according to a spatially-explicit evolutionary scenario implemented in the individual-based simulation program SLIM 3 (Haller and Messer 2019). The complex demographic scenario included colonization of the species range from a single origin, and adaptation to encountered environmental conditions. To simulate natural selection, adaptive traits were controlled by a polygenic architecture, with additive effects from two (unobserved) environmental variables. From the simulation, we known that about $30\%$ of loci were under the influence of the environment. 
+## Short presentation of the studied data
+
+This tutorial uses a simulated dataset. A brief analysis of population structure and a GEA analysis using four environmental variables are provided in the LEA tutorial (ssmpg2025). It is recommended to read and run the LEA tutorial beforehand to better understand the data used in this tutorial.
+
+The example dataset includes a genotypic matrix in LFMM format, containing 200 diploid individuals (rows) genotyped at 510 SNPs (columns). The corresponding environmental matrix includes 4 correlated environmental variables (env), each measured for every individual.
+
+The data were simulated using a spatially explicit evolutionary scenario implemented in the individual-based simulation program SLiM 3 (Haller and Messer 2019). The demographic scenario involved range expansion from a single origin, with subsequent adaptation to local environmental conditions. Natural selection was simulated using a polygenic architecture, where adaptive traits were influenced by additive effects from two (unobserved) environmental variables. According to the simulation, approximately $30\%$ of the loci are affected by environmental selection.
 
 ```{r}
+# loading the simulated data in R
 data("offset_example")
-# genotypes for 200 individuals
+
+# Y containes genotypes for 200 individuals
 Y <- offset_example$geno
 
-# Four environmental variables for 200 individuals
+# X containes 4 environmental variables for 200 individuals
 X <- offset_example$env
 ```
 
- 
 
 
-## Genotype-Environment Association (GEA) studies with LFMM
+## Genotype-Environment Association (GEA) analysis using LFMM
 
-The complete process to identify locus under selection is described in the LEA tutorial, using an LFMM with $K = 3$ and a FDR control algorithm with a fdr level of 0.2
+
+A preliminary step in using Gradient Forest to compute genetic offset statistics is to identify a list of candidate loci from a genotype-environment association (GEA) analysis. As described in the LEA tutorial, we recommend using an LFMM with K=3 latent factors, applying recalibrated Fisher’s tests, and controlling for multiple testing with a false discovery rate (FDR) threshold of 20%.
+
 
 ```{r}
-
-# Run LFMM with K = 3
-
+# use lfmm2 to estimate the latent factors from the data 
 mod_lfmm2 <- lfmm2(input = Y,
                    env = X, 
                    K = 3)
+```
 
-# Obtain the pvalue object using lfmm2.test function
 
+GEA significance values are obtained using Fisher’s tests (full = TRUE). The full option indicates whether all environmental variables are included simultaneously in the test.
+
+```{r}
+# GEA analysis computing locus-specific p-values, P
 pv_lfmm2 = lfmm2.test(object = mod_lfmm2,
                       input = Y,
                       env = X, 
                       full = TRUE)$pvalues
+```
 
-# Obtaining candidate SNPs using qvalue package and a FDR level of 0.2
+To identify loci with significant associations, the false discovery rate (FDR) control procedure is applied. The candidate loci selected by this procedure are highlighted as circles in the plot below.
 
+```{r}
+# FDR control: computing qvalues
 qv_lfmm2  <- qvalue::qvalue(pv_lfmm2, fdr.level = 0.2)
 
-plot(-log10(pv_lfmm2 ), cex = .3, xlab = "Locus",  ylab = "-Log(P)", col = "blue")
+# Manhattan plot showing the most interesting targets
+plot(-log10(pv_lfmm2), cex = .3, xlab = "Locus",  ylab = "-Log(P)", col = "blue")
+
 # Orange line: Bonferonni multiple testing threshold for significance
 abline(h = -log10(0.1/ncol(Y)), col = "orange")
 
+# the most interesting targets
 candidates <- which(qv_lfmm2$significant)
 
-# Circles: Candidate loci at FDR level = 30%
+# Circles: Candidate loci at FDR level = 20%
 points(candidates, -log10(pv_lfmm2)[candidates], cex = .9, col = "brown")
 ```
 
-## Genomic offset using gradient forests
 
-We will now compute the genetic offset using the gradient forest function.
-To compute an offset require two types of environmental conditions.
-The first one can be thought of as the current environmental conditions on which the gradient forest will be train.
-The second is the new environmental conditions that will be use to compute an offset between future and new environmental conditions.
-In our simulation, an instantaneous change in environmental conditions was applied at the end of the simulation, and the loss in survival probability was measured at each sampled location. The new conditions are loaded as follows.  
+## Genomic offset using GF
+
+This section shows how to compute genetic offset using the Gradient Forest function. Calculating genetic offset requires two sets of environmental conditions:
+
+1. The current environmental conditions, which are used to train the Gradient Forest model.
+
+2. The future (or altered) environmental conditions, which are used to compute the offset by comparing predicted genetic compositions under both scenarios.
+
+
+In the simulated data, an instantaneous change in environmental conditions was applied at the end of the simulation, and the relative fitness of individuals was measured at each sampled location following this change. The altered environmental conditions can be loaded as follows.  
 
 ```{r}
+## modified environment
 X_pred <- offset_example$env.pred
-
 ```
 
+After obtaining the list of candidate loci and loading the new environmental conditions, genetic offsets can be computed using the GF method.
 
-Having obtained a list of candidate loci and loaded new conditions, the genetic offsets can be computed using GF
+
+### Function to run the GF algorithm on training data
+
+Here is a function to run the GF algorithm on training data. The input data for the function include the genotypic matrix (Y), the environmental matrix (X), a set of candidate loci, and additional confounding factors if available.  
 
 ```{r}
-# This function aims at running GF algorithm on training data
 
 run_gradient_forest <- function(Y, X, causal_set, confounding_var=c()){
   # GF requires a dataframe object
-  # We create two lists containing names for predictor (X) and names for output (OUT)
+  # creates two lists containing names for predictor (X) and names for output (OUT)
   # These lists will be used as column names in the data frame
   nb_env_var = dim(X)[2]
   var_name <- sapply(seq(1,nb_env_var), function(x) paste("X",x, sep=""))
   nb_causal <- length(causal_set)
   output_name <- sapply(seq(1,nb_causal), function(x) paste("OUT",x, sep=""))
   
-  # This block of code check whether the user has specified variable as confounding var
-  # If it's the case we will add these to the column names.
+  # This block of code checks whether the user has specified some variables as being confounders
+  # If it is the case, it adds their names to the column names.
   nb_confound <- dim(confounding_var)[2]
   if (is.null(nb_confound)){
     confound_name <- c()
@@ -119,41 +140,38 @@ run_gradient_forest <- function(Y, X, causal_set, confounding_var=c()){
     df_gf <- data.frame(Y[,causal_set], X, confounding_var)
   }
   
-  # In GF the predictor are the environmental variables and the possible confounding variables that are specified
-  # The difference between environmental variables and confounding variables is that confounding variables will not
-  # change in the new environmental condition
+  # In GF the predictors are the environmental variables plus specified confounding variables
+  # Confounding variables do not change under new environmental conditions
   pred_name <- c(var_name, confound_name)
   colnames(df_gf) <- c(output_name, pred_name)
-  # Gradient forests requires factor column when you use SNPs value (i.e 0, 1 and 2) as opposed to allele frequency value
+  # Gradient forests requires factor column when SNP values (i.e 0, 1 and 2) are used as opposed to allele frequency values
   for (name in output_name){
     df_gf[,name] <- as.factor(df_gf[,name])
   }
   
-  # This command will allow us to obtain a gradient forest object
+  # This command allows us to obtain a gradient forest object
   gf <- gradientForest(data=df_gf, predictor.vars=pred_name, response.vars = output_name, ntree=500)
   return(list(gf=gf, pred_name = var_name))
 }
 
 
-
-
 # This function converts environmental variables into allelic composition value
-# It then predict the genetic offset using the euclidean distance between
+# It predicts the genetic offset value by using the Euclidean distance between
 # allelic composition of current and future environmental variables
 
 predict_gf <- function(gf, X, X_pred, pred_name){
 
-  # We create data frame for current and new environmental conditions
+  # create data frame for current and new environmental conditions
   df_cur_var <- data.frame(X)
   df_fut_var <- data.frame(X_pred)
   colnames(df_cur_var) <- pred_name
   colnames(df_fut_var) <- pred_name
   
-  # We obtain the cumulative importance value from GF for current and new environmental conditions
+  # cumulative importance value from GF for current and new environmental conditions
   currentcumimp <- predict(gf, df_cur_var)
   futurcumimp <- predict(gf, df_fut_var)
 
-  # We compute the euclidean distance between current and new cumulative importance
+  # Euclidean distance between current and new cumulative importance
   nb_ind <- nrow(X)
   genetic_offset <- c()
   for (i in seq(1,nb_ind)){
@@ -177,46 +195,88 @@ get_genetic_offset_gf <- function(Y, X, X_pred, causal_set, confounding_var = NU
   return(list(go=genoffset, varimp=gf$gf$overall.imp))
 }
 
-
 ```
 
 
-We use all the above function to obtain genetic offset from GF
-```{r}
-go_gf <- get_genetic_offset_gf(Y, X, X_pred, candidates)
-```
+### Computing genetic offset statistics using GF
 
 
-We now compare genetic offset from GF with survival loss
+We use the functions defined in the previous section to obtain genetic offset statistics for the samples in the simulated data. First, we use all loci in the genotypic matric (i.e., ignoring the GEA)
 
 ```{r}
-survival_loss <- read.table("fitness_variation.txt", header = FALSE)[,1]
-
-# plot the survival loss vs squared root of the genetic gap 
-plot(go_gf$go, survival_loss , ylab ="Survival loss",  xlab ="Genetic offset GF", cex = .6, col = "blue")
-```
-```{r}
-summary(lm(survival_loss ~ go_gf$go))
+go_gf <- get_genetic_offset_gf(Y, X, X_pred, causal_set = 1:ncol(Y))
 ```
 
 
-## Correcting for population structure
 
-
-Here we include the latent factors of LFMM into GF to reduce the effect of confounding due to neutral population structure.
-
+As in the LEA tutorial, the relative fitness loss following the environmental change can be compared to the genetic offset obtained from the GF method.
 
 ```{r}
-go_gf_corrected <- get_genetic_offset_gf(Y, X, X_pred, candidates, confounding_var = mod_lfmm2@U)
+## load log of relative fitness
+log_relative_fitness <- read.table("fitness_variation.txt", header = FALSE)[,1]
 
+# plot the negative log relative fitness vs  genetic offset 
+plot(go_gf$go, - log_relative_fitness , 
+     ylab ="Relative fitness (log)",  
+     xlab ="Genetic offset", cex = .6, col = "blue")
 ```
+
+Evaluate the correlation between negative log relative fitness and GF  genetic offset. The fit is statistically  significant (r-squared around 30%)
 
 ```{r}
-plot(go_gf_corrected$go, survival_loss , ylab ="Survival loss",  xlab ="Genetic offset GF corrected", cex = .6, col = "blue")
+summary(lm(log_relative_fitness ~ go_gf$go))
 ```
+
+Next, we use the (too) small set of candidate loci computed in the GEA, but without increasing the fit to relative fitness.  
+
+```{r}
+go_gf_candidates <- get_genetic_offset_gf(Y, X, X_pred, causal_set = candidates)
+summary(lm(log_relative_fitness ~ go_gf_candidates$go))
+```
+
+
+
+
+## Correcting for population structure in GF
+
+
+To reduce the effect of confounding due to population structure, GF can include covariates such as  LFMM latent factors or principal components of genetic variation at the training stage. Let see what happen when  principal components and when LFMM factors  are included in the model training. 
+
+
+First we include principal components as covariates into GF
 
 
 ```{r}
-summary(lm(survival_loss ~ go_gf_corrected$go))
+## PCA of genetic data
+K = 3
+pc = prcomp(Y)
+
+## PCA corrected GF
+go_gf_pca_corrected <- get_genetic_offset_gf(Y, X, X_pred, causal_set = 1:ncol(Y), confounding_var = pc$x[,1:K])
+summary(lm(log_relative_fitness ~ go_gf_pca_corrected$go))
 ```
-In this example, using latent factors estimated in an LFMM as confounding variables did not lead to a substantial change in the values of the genetic offset.
+
+
+Next we include latent factors as covariates into GF
+
+```{r}
+go_gf_lfmm_corrected <- get_genetic_offset_gf(Y, X, X_pred, causal_set = 1:ncol(Y), confounding_var = mod_lfmm2@U)
+summary(lm(log_relative_fitness ~ go_gf_lfmm_corrected$go))
+```
+
+
+In this example, using principal components or latent factors estimated in an LFMM as covariates did not lead to a substantial improvement in the predictions of genetic offset.
+
+
+
+
+
+## References
+
+
+- Caye, K., Jumentier, B., Lepeule, J., Fran\c cois, O. (2019). LFMM 2: Fast and accurate inference of gene-environment associations in genome-wide studies. Molecular Biology and Evolution, 36(4), 852-860.
+
+
+- Fitzpatrick, M. C.,  Keller, S. R. (2015). Ecological genomics meets community-level modelling of biodiversity: Mapping the genomic landscape of current and future environmental adaptation. Ecology Letters, 18(1), 1-16.
+
+
