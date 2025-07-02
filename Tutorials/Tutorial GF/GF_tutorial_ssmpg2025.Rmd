@@ -276,6 +276,8 @@ In this example, using principal components or latent factors estimated in an LF
 
 - Caye, K., Jumentier, B., Lepeule, J., Fran\c cois, O. (2019). LFMM 2: Fast and accurate inference of gene-environment associations in genome-wide studies. Molecular Biology and Evolution, 36(4), 852-860.
 
+- Ellis, N., S.J. Smith, and C.R. Pitcher. (2012.) Gradient forests: calculating importance gradients on physical predictors. Ecology, 93, 156-168.
+
 
 - Fitzpatrick, M. C.,  Keller, S. R. (2015). Ecological genomics meets community-level modelling of biodiversity: Mapping the genomic landscape of current and future environmental adaptation. Ecology Letters, 18(1), 1-16.
 
