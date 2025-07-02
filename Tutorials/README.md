@@ -10,9 +10,7 @@ R markdown files and links presenting short tutorials to perform GEA studies and
 
 * Gradient Forest (GF) Tutorial runs GF on the same data set as in the LEA 3 tutorial.
 
-* fitzpatrickGDM_GF Tutorial contains an exhaustive set of R functions to run GF and GDM analysis.
-
-* R Tutorial on how to download and manipulate environmental data 
+* R Tutorial on how to map predictions of GO in geographic space 
 
 
 
