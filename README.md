@@ -71,29 +71,44 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("qvalue")
 
 ```
-
-
 ### Install BAYPASS
 
-Download the archive for the latest stable version (2.3) from http://www1.montpellier.inra.fr/CBGP/software/baypass/ or directly via the following command run on a terminal:
+Download the archive for the latest stable version (3.1) from [here](https://forge.inrae.fr/mathieu.gautier/baypass_public)](https://forge.inrae.fr/mathieu.gautier/baypass_public) or directly via the following command run on a terminal:
 ```
-wget http://www1.montpellier.inra.fr/CBGP/software/baypass/files/baypass_2.3.tar.gz
+wget https://forge.inrae.fr/mathieu.gautier/baypass_public/-/archive/v3.1/baypass_public-v3.1.tar.gz
 ```
 Extract the archive, *e.g.*, from a terminal:
 ```
-tar -zxvf baypass_2.3.tar.gz
+tar -zxvf baypass_public-v3.1.tar.gz
 ```
-The source files are to be found in the *src* subdirectory. BayPass is coded in Fortran90 and can therefore be compiled for any system supporting a Fortran90 compiler using the provided Makefile. This Makefile is designed to work with either the free compiler *gfortran* (if not already installed in your system, binaries are available at https://gcc.gnu.org/wiki/GFortranBinaries and are easy to install for most Windows, Mac and Linux OS versions) or the commercial *ifort* intel Fortran compiler that is now freely available (for non commercial use) as part of the Intel *oneAPI* Toolkit (see [installation instruction for Windows, MacOS and Linux system](https://www.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-macos/top.html)). 
-BayPass also uses OpenMP (http://openmp.org/wp/) to implement multithreading, which allows parallel calculation on computer systems that have multiple CPUs or CPUs with multiple cores. Users thus have to make sure that the corresponding libraries are installed (which is usually the case, on Linux OS or following compiler installation previously described). The following instructions run within the *src* subdirectory allows to compile the code and to produce a binary:
-* using the *gfortran* free compiler (the command should automatically produce an executable called *g_baypass*):
-```
+*BayPass* is coded in modern Fortran and can therefore be compiled for any system supporting a Fortran 90 (or higher) compiler. More specifically, the provided Makefile  is designed to work with:
+
+- the free compiler *gfortran* (version >=10.0 recommended; if not already installed in your system, binaries may be available [here](https://gcc.gnu.org/wiki/GFortranBinaries) and are easy to install for most Windows, Mac and Linux OS versions) or;
+- the commercial Intel® Fortran compilers *ifx* and *ifort* which are available at no cost for most platforms as
+part of the [Intel® oneAPI HPC Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html).
+
+Note also that *BayPass* relies on [*OpenMP*](https://www.openmp.org/wp/) to implement multi-threading (usually pre-installed on most Linux OS) on computer systems that have multiple CPUs or CPUs with multiple cores. 
+
+With *gfortran*, *ifx* and *ifort*, compiling the source can simply be done with the following `make` instructions run within the *sources* sub-directory:
+
+-  with *gfortran* (the command then produces an executable called `g_baypass`):
+``` 
 make clean all FC=gfortran
 ```
-* using the *ifort* intel Fortran compiler (the command should automatically produce an executable called *i_baypass*):
+
+- with *ifx* (the command then produces an executable called `ifx_baypass`):
+``` 
+make clean all FC=ifx
 ```
-make clean all FC=ifort 
+
+- with *ifort* (the command then produces an executable called `i_baypass`):
+``` 
+make clean all FC=ifort
 ```
 > Note: Under Linux (or MacOS), before the first use, make sure to give appropriate execution rights to the program. For instance you may run:
 >```chmod +x baypass```
+
+See the [manual](https://forge.inrae.fr/mathieu.gautier/baypass_public/-/blob/master/manual/BayPass_manual.pdf) for more details on how to compile and the program in general.
+
 
 
