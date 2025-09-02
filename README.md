@@ -73,7 +73,7 @@ BiocManager::install("qvalue")
 ```
 ### Install BAYPASS
 
-Download the archive for the latest stable version (3.1) from [here](https://forge.inrae.fr/mathieu.gautier/baypass_public)](https://forge.inrae.fr/mathieu.gautier/baypass_public) or directly via the following command run on a terminal:
+Download the archive for the latest stable version (3.1) from [here](https://forge.inrae.fr/mathieu.gautier/baypass_public) or directly via the following command run on a terminal:
 ```
 wget https://forge.inrae.fr/mathieu.gautier/baypass_public/-/archive/v3.1/baypass_public-v3.1.tar.gz
 ```
