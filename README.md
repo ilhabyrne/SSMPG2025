@@ -29,7 +29,7 @@ During the data analysis sessions, participants are encouraged to form teams. Id
 
    * A list of candidate loci detected using their preferred GEA method, or a combination of methods, for both challenges
 
-   * A list of genetic offset values obtained using their preferred offset method, or a combination of methods, for each snow slug population
+   * A list of genomic offset values obtained using their preferred offset method or a combination of methods for each snow slug population
 
    * A list of optimal source populations for the three Woolly marmot reintroduction sites
 
