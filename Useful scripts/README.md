@@ -13,3 +13,7 @@ R CMD INSTALL extendedForest_1.6.2.tar.gz
 Then open R or Rstudio and install gradientForest like this
 
 install.packages("gradientForest", repos="<http://R-Forge.R-project.org>")
+
+## Installing gfortran for macOS
+
+it worked with gfortran-12.2-universal.pkg  from <https://cran.r-project.org/bin/macosx/tools/>
