@@ -252,6 +252,7 @@ if(ncol(X) > 1) {
   print(p_multi)
 }
 
+
 ## LFMM2 with entire env matrix ----
 
 # Run LFMM2 with entire environmental matrix
@@ -350,10 +351,11 @@ cor(g_offset$offset, log_rel_fit)^2
 ./g_baypass -npop 100 -gfile limaxnivalis.baypass.geno -efile limaxnivalis.obsenv.baypass.cov -scalecov -omegafile core_analysis_mat_omega.out -outprefix env_analysis -nthreads 4
 
 
-#After running the standard model, BayPass produces several output files. The most important for identifying significant SNPs are:
+# After running the standard model, BayPass produces several output files. The most important for identifying significant SNPs are:
 #*_summary_betai_reg.out - Contains Bayes Factors (BF) for each SNP-covariate association
 #*_summary_betai.out - Contains detailed association statistics
 #*_summary_pi_xtx.out - Contains XtX differentiation statistics
+
 
 ## Identifying Significant SNPs ----
 
@@ -417,3 +419,95 @@ corrplot(cor.mat,method="color",mar=c(2,1,2,2)+0.1,
          main=expression("Correlation map based on"~hat(Omega)))
 
 anacore.snp.res=read.table("env_analysis_summary_pi_xtx.out",h=T)
+
+## Create POD ---- 
+
+source("baypass_utils.R")
+require(corrplot) ; require(ape)
+library(WriteXLS)
+
+# Read omega matrix BayPass output
+SG.omega=as.matrix(read.table("SG.BP_mat_omega.out"))
+
+# Identify pool names for plotting
+colnames(SG.omega) <- c("PN","HB","BB","LB","JB","SP","BT","CA","MB",
+                        "KY","CF","PA","HH", "HL")
+rownames(SG.omega) <- c("PN","HB","BB","LB","JB","SP","BT","CA","MB",
+                        "KY","CF","PA","HH", "HL")
+
+# Create a correlation matrix of the omega values, which can be used to assess genomic differentiation between pools
+cor.mat=cov2cor(SG.omega)
+corrplot(cor.mat,method="color",mar=c(2,1,2,2)+0.1,
+         main=expression("Correlation map based on"~hat(Omega)))
+
+# We can also assess population differentiation with hierarchical clustering:
+bta14.tree=as.phylo(hclust(as.dist(1-cor.mat**2)))
+plot(bta14.tree,type="p",
+     main=expression("Hier. clust. tree based on"~hat(Omega)~"("*d[ij]*"=1-"*rho[ij]*")"))
+
+# Read the xtx BayPass output
+SG.snp.res=read.table("SG.BP_summary_pi_xtx.out",h=T)
+
+# Get the Pi Beta distribution for POD generation
+SG.pi.beta.coef=read.table("SG.BP_summary_beta_params.out",h=T)$Mean
+
+# Upload original data to get read counts
+SG.data<-geno2YN("SG.genobaypass")
+
+# Simulate POD dataset to use for outlier SNP detection
+simu.SG <-simulate.baypass(omega.mat=SG.omega,nsnp=10000,sample.size=SG.data$NN,
+                           beta.pi=SG.pi.beta.coef,pi.maf=0,suffix="SG.BP.sim")
+
+
+
+## Genomic offset ----
+
+# ./g_baypass -gfile limaxnivalis.baypass.geno -efile limaxnivalis.obsenv.baypass.cov -outprefix core -nthreads 4
+
+# ./g_baypass -gfile limaxnivalis.baypass.geno -efile limaxnivalis.obsenv.baypass.cov -covmcmc -omegafile core_mat_omega.out -outprefix cvmc -nthreads 4
+
+# ./g_baypass -npop 100 -gfile limaxnivalis.baypass.geno -efile limaxnivalis.obsenv.baypass.cov -scalecov -covmcmc -omegafile core_mat_omega.out -outprefix cvmc_scaled -nthreads 4
+
+# Identify top SNPs
+# Using Bayes Factor (dB) Thresholds
+# The most common approach is to use a BF threshold of 20 dB
+baypass_results <- read.table("core_summary_betai_reg.out", header = TRUE)
+
+# Set threshold for Bayes Factor
+bf_threshold <- 15
+
+# Identify significant SNPs
+significant_snps <- baypass_results[baypass_results$BF.dB. > bf_threshold, ]
+
+# View the significant SNPs
+head(significant_snps)
+
+# Count how many significant SNPs
+nrow(significant_snps)
+
+unique_significant_snps <- unique(significant_snps$MRK)
+length(unique_significant_snps)
+
+# 42 unique SNPs for BF 15
+# 120 unique SNPs for BF 10
+
+# Run GO
+res <- compute_genetic_offset(
+  regfile= "cvmc_summary_betai.out",
+  covfile = "limaxnivalis.obsenv.baypass.cov",
+  newenv = read.table("limaxnivalis.predenv.baypass.cov"),
+  refenv=NULL)
+
+res_sc <- compute_genetic_offset(
+  regfile= "cvmc_scaled_summary_betai.out",
+  covfile = "limaxnivalis.obsenv.baypass.cov",
+  newenv = read.table("limaxnivalis.predenv.baypass.cov"),
+  refenv=NULL)
+
+res_pc <- compute_genetic_offset(
+  regfile= "baypass_run_obs_mcmc_summary_betai.out",
+  covfile = "covariates_obs.txt",
+  newenv = read.table("covariates_pred_projected.txt"),
+  refenv=NULL)
+
+

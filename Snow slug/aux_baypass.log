@@ -1,0 +1,294 @@
+Running BayPass Version 3.1 with the following command line:
+./g_baypass -gfile limaxnivalis.baypass.geno -efile limaxnivalis.obsenv.baypass.cov -omegafile core_mat_omega.out -auxmodel -outprefix aux
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Size of the data set 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+ No of Markers                      =      2333
+ Total No of Populations            =       100
+ Data consists of allele count only
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        READING ALLELE COUNT DATA
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Last  SNP ref. Allele count     0    0    0    0    0    0   24   42   23    0    0    0    0    0    0    0    5   26    5    0    0    0    0    0    0    0    0    3    1    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+Last  SNP total Gene count     48   56   50   58   60   52   38   42   64   50   54   38   54   46   54   50   52   40   54   42   42   52   50   52   42   42   52   46   36   48   38   40   32   36   24   44   34   40   38   48   56   34   34   28   38   40   38   34   26   52   44   44   54   46   38   48   28   30   34   44   40   34   38   36   40   40   40   42   38   38   42   32   38   32   38   36   38   34   34   20   30   48   48   22   34   38   40   32   36   34   38   26   36   42   36   32   42   36   36   28
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Model Specifications
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  -> MCMC Covariate Mode with  16 covariates (outlier detection and estimation of omega are inactivated)
+  (*) Prior on Beta coef is U(  0.0000,  0.3000)
+  (*) Auxiliary variable model with P~Beta( 0.020, 1.980) => BF will be calculated
+        => No spatial dependency between markers (isingbeta=0.)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           MCMC specifications
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+ Nb. of sampled parameter values       =     250
+ Thinning Rate                         =      20
+ Burn in Period Length                 =    1000
+ Max Number of Pilot runs              =      10
+ Pilot run Length                      =     100
+ R.N.G. seed                            =   5001
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        COVARIATE DATA
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Cov:   1  (Mean =      0.7317  ; SD =      0.5018)
+Cov:   2  (Mean =     -1.7129  ; SD =      0.9335)
+Cov:   3  (Mean =      1.1917  ; SD =      0.5255)
+Cov:   4  (Mean =      0.5548  ; SD =      0.5057)
+Cov:   5  (Mean =     -1.5899  ; SD =      0.6134)
+Cov:   6  (Mean =      0.4984  ; SD =      0.2416)
+Cov:   7  (Mean =      0.9718  ; SD =      0.3856)
+Cov:   8  (Mean =     -1.8606  ; SD =      0.7643)
+Cov:   9  (Mean =     -1.0450  ; SD =      0.6099)
+Cov:  10  (Mean =      0.4042  ; SD =      0.3244)
+Cov:  11  (Mean =      0.4966  ; SD =      0.2381)
+Cov:  12  (Mean =      1.6612  ; SD =      0.5931)
+Cov:  13  (Mean =      0.0368  ; SD =      0.2274)
+Cov:  14  (Mean =     -1.6095  ; SD =      0.9162)
+Cov:  15  (Mean =      1.0115  ; SD =      0.3670)
+Cov:  16  (Mean =     -0.4973  ; SD =      0.8640)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        PILOT RUNS
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Initial Values:
+Pij min         =      0.01515  Pij max         =      0.98485  Average Pij     =      0.14252
+Pij_til min     =     -3.80385  Pij_til max     =      4.81153  Average Pij_til =      0.00000
+PI min          =      0.03816  PI max          =      0.94044  Average PI      =      0.14252
+Pi_beta_p vals  =      0.33794      2.03324
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    1
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.21720  Pij max         =      1.94597  Average Pij     =      0.00879
+Pij_til min     =     -9.86133  Pij_til max     =     10.91470  Average Pij_til =     -0.57421
+PI min          =      0.00781  PI max          =      0.97320  Average PI      =      0.12712
+Pi_beta_p vals  =      0.66714      3.58705
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.02321   mean updated delta_pij=   0.00703 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.08864   mean updated delta_pi =  0.11098
+      Mean Acceptance Rate Betai             =  0.69877   mean updated delta_betai=  0.07974
+      Mean Acceptance Rate b_mu              =  0.15000        updated delta    =  0.01800
+      Mean Acceptance Rate b_phi             =  0.03000        updated delta    =  0.09001
+
+iii) Running Time            :  0 d  0 h  0 min 27 sec
+     Estimated Remaining Time:  0 d  0 h 31 min 49 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    2
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.37858  Pij max         =      2.01993  Average Pij     =     -0.02068
+Pij_til min     =     -9.90311  Pij_til max     =     11.72745  Average Pij_til =     -0.71045
+PI min          =      0.00632  PI max          =      0.96870  Average PI      =      0.12850
+Pi_beta_p vals  =      0.71622      3.89989
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.28241   mean updated delta_pij=   0.00778 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.25243   mean updated delta_pi =  0.07100
+      Mean Acceptance Rate Betai             =  0.59599   mean updated delta_betai=  0.11073
+      Mean Acceptance Rate b_mu              =  0.47000        updated delta    =  0.01944
+      Mean Acceptance Rate b_phi             =  0.30000        updated delta    =  0.06279
+
+iii) Running Time            :  0 d  0 h  0 min 55 sec
+     Estimated Remaining Time:  0 d  0 h 31 min 14 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    3
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.42512  Pij max         =      1.98620  Average Pij     =     -0.03911
+Pij_til min     =    -10.50007  Pij_til max     =     12.19620  Average Pij_til =     -0.78804
+PI min          =      0.00663  PI max          =      0.96500  Average PI      =      0.12797
+Pi_beta_p vals  =      0.71563      3.81493
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24720   mean updated delta_pij=   0.00807 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.36007   mean updated delta_pi =  0.05964
+      Mean Acceptance Rate Betai             =  0.51848   mean updated delta_betai=  0.13467
+      Mean Acceptance Rate b_mu              =  0.38000        updated delta    =  0.01706
+      Mean Acceptance Rate b_phi             =  0.37000        updated delta    =  0.05369
+
+iii) Running Time            :  0 d  0 h  1 min 22 sec
+     Estimated Remaining Time:  0 d  0 h 30 min 46 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    4
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.49382  Pij max         =      2.25424  Average Pij     =     -0.05572
+Pij_til min     =     -9.53112  Pij_til max     =     12.05248  Average Pij_til =     -0.85854
+PI min          =      0.00734  PI max          =      0.96195  Average PI      =      0.12894
+Pi_beta_p vals  =      0.71437      4.17872
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.25405   mean updated delta_pij=   0.00852 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.40917   mean updated delta_pi =  0.05562
+      Mean Acceptance Rate Betai             =  0.47974   mean updated delta_betai=  0.15134
+      Mean Acceptance Rate b_mu              =  0.48000        updated delta    =  0.01881
+      Mean Acceptance Rate b_phi             =  0.57000        updated delta    =  0.07007
+
+iii) Running Time            :  0 d  0 h  1 min 50 sec
+     Estimated Remaining Time:  0 d  0 h 30 min 18 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    5
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.84259  Pij max         =      2.44780  Average Pij     =     -0.07049
+Pij_til min     =    -11.89766  Pij_til max     =     11.79681  Average Pij_til =     -0.91931
+PI min          =      0.00685  PI max          =      0.96753  Average PI      =      0.13014
+Pi_beta_p vals  =      0.71929      3.86892
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.25010   mean updated delta_pij=   0.00875 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.42502   mean updated delta_pi =  0.05321
+      Mean Acceptance Rate Betai             =  0.46613   mean updated delta_betai=  0.16572
+      Mean Acceptance Rate b_mu              =  0.42000        updated delta    =  0.01820
+      Mean Acceptance Rate b_phi             =  0.40000        updated delta    =  0.06465
+
+iii) Running Time            :  0 d  0 h  2 min 17 sec
+     Estimated Remaining Time:  0 d  0 h 29 min 49 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    6
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -2.91229  Pij max         =      2.36292  Average Pij     =     -0.08493
+Pij_til min     =    -11.56210  Pij_til max     =     11.04105  Average Pij_til =     -0.97858
+PI min          =      0.00687  PI max          =      0.96789  Average PI      =      0.13023
+Pi_beta_p vals  =      0.72501      4.22610
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24872   mean updated delta_pij=   0.00904 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.43740   mean updated delta_pi =  0.05236
+      Mean Acceptance Rate Betai             =  0.46085   mean updated delta_betai=  0.18077
+      Mean Acceptance Rate b_mu              =  0.48000        updated delta    =  0.02007
+      Mean Acceptance Rate b_phi             =  0.39000        updated delta    =  0.05819
+
+iii) Running Time            :  0 d  0 h  2 min 45 sec
+     Estimated Remaining Time:  0 d  0 h 29 min 21 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    7
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -3.06434  Pij max         =      2.75966  Average Pij     =     -0.09927
+Pij_til min     =    -11.68299  Pij_til max     =     11.38381  Average Pij_til =     -1.03542
+PI min          =      0.00713  PI max          =      0.97337  Average PI      =      0.13246
+Pi_beta_p vals  =      0.74573      4.10536
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24493   mean updated delta_pij=   0.00913 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.43822   mean updated delta_pi =  0.05181
+      Mean Acceptance Rate Betai             =  0.45839   mean updated delta_betai=  0.19823
+      Mean Acceptance Rate b_mu              =  0.41000        updated delta    =  0.01897
+      Mean Acceptance Rate b_phi             =  0.39000        updated delta    =  0.05237
+
+iii) Running Time            :  0 d  0 h  3 min 12 sec
+     Estimated Remaining Time:  0 d  0 h 28 min 54 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    8
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -3.27238  Pij max         =      2.80415  Average Pij     =     -0.11259
+Pij_til min     =    -11.10212  Pij_til max     =     10.50915  Average Pij_til =     -1.08667
+PI min          =      0.00885  PI max          =      0.97461  Average PI      =      0.13162
+Pi_beta_p vals  =      0.72467      3.93885
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24999   mean updated delta_pij=   0.00947 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.44796   mean updated delta_pi =  0.05232
+      Mean Acceptance Rate Betai             =  0.45746   mean updated delta_betai=  0.21978
+      Mean Acceptance Rate b_mu              =  0.53000        updated delta    =  0.02305
+      Mean Acceptance Rate b_phi             =  0.48000        updated delta    =  0.05775
+
+iii) Running Time            :  0 d  0 h  3 min 40 sec
+     Estimated Remaining Time:  0 d  0 h 28 min 27 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:    9
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -3.55378  Pij max         =      2.78043  Average Pij     =     -0.12583
+Pij_til min     =    -13.62820  Pij_til max     =     10.73204  Average Pij_til =     -1.13082
+PI min          =      0.00707  PI max          =      0.95546  Average PI      =      0.13171
+Pi_beta_p vals  =      0.77174      4.28282
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24881   mean updated delta_pij=   0.00967 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.44953   mean updated delta_pi =  0.05318
+      Mean Acceptance Rate Betai             =  0.45735   mean updated delta_betai=  0.24714
+      Mean Acceptance Rate b_mu              =  0.31000        updated delta    =  0.01660
+      Mean Acceptance Rate b_phi             =  0.49000        updated delta    =  0.06497
+
+iii) Running Time            :  0 d  0 h  4 min  8 sec
+     Estimated Remaining Time:  0 d  0 h 28 min  1 sec
+
+!!!!!!!!!!!!!!!!!!!
+## PILOT RUN:   10
+!!!!!!!!!!!!!!!!!!!
+
+i)   Node Values:
+Pij min         =     -3.50950  Pij max         =      2.78597  Average Pij     =     -0.13777
+Pij_til min     =    -15.58931  Pij_til max     =      9.79805  Average Pij_til =     -1.17404
+PI min          =      0.00968  PI max          =      0.96608  Average PI      =      0.13328
+Pi_beta_p vals  =      0.75236      4.05525
+
+ii)  Acceptance Rates (before adjustment):
+      Mean Acceptance Rate for p_ij vectors  =  0.24364   mean updated delta_pij=   0.00972 (associated to read/allele count data)
+      Mean Acceptance Rate Pi                =  0.44883   mean updated delta_pi =  0.05305
+      Mean Acceptance Rate Betai             =  0.45761   mean updated delta_betai=  0.28249
+      Mean Acceptance Rate b_mu              =  0.50000        updated delta    =  0.01905
+      Mean Acceptance Rate b_phi             =  0.44000        updated delta    =  0.06579
+
+iii) Running Time            :  0 d  0 h  4 min 35 sec
+     Estimated Remaining Time:  0 d  0 h 27 min 32 sec
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        BURN-IN
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+Node Values:
+Pij min         =     -5.06606  Pij max         =      3.42924  Average Pij     =     -0.23363
+Pij_til min     =    -17.54687  Pij_til max     =      9.44753  Average Pij_til =     -1.48676
+PI min          =      0.01084  PI max          =      0.94296  Average PI      =      0.14168
+Pi_beta_p vals  =      0.85698      4.54015
+
+Running Time            :  0 d  0 h 10 min  9 sec
+Estimated Remaining Time:  0 d  0 h 25 min 23 sec
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        MCMC CHAIN
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+      Mean Final Acceptance Rate Pij  =  0.36216
+      Mean Final Acceptance Rate Pi   =  0.66159
+      Mean Final Acceptance Rate b_mu =  0.44340
+      Mean Final Acceptance Rate b_phi=  0.42060
+
+Analysis completed in  0 d  0 h 35 min 55 sec
